@@ -1,0 +1,53 @@
+version: "3"
+services:
+  mysql-docker-container:
+    image: mysql:5.7
+    ports: 
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=pos
+      - MYSQL_USER=gichelli
+      - MYSQL_PASSWORD=password 
+    restart: always
+    
+#    volumes:
+#      - /data/mysql
+
+    #volumes:
+    #  - /data/mysql
+#    networks:
+#      - foo 
+  spring-boot-jpa-app:
+    image: spring-boot-jpa-image
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql-docker-container
+      
+
+    ports: 
+      - "8087:8080"
+    expose:
+      - "8080"
+#    networks:
+#      - foo
+    restart: always
+#    volumes:
+#      - /data/spring-boot-app
+    #srestart: unless-stopped
+    #volumes:
+     # - /data/spring-boot-app
+      
+#networks:
+#  pos_network:
+#    driver: bridge
+
+      
+networks:
+  foo:
+    external: true
+
+    
